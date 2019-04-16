@@ -1,13 +1,13 @@
 
 exports.up = function(knex, Promise) {
   return knex.schema
-    .createTable('patient_info_table', tbl => {
+    .createTable('practitioner_info_table', tbl => {
         tbl.increments();
         tbl.string('firstName')
             .notNullable();
         tbl.string('lastName')
             .notNullable();
-        tbl.string('gender')
+        tbl.string('title')
             .notNullable();
         tbl.integer('userId')
             .references('id').inTable('users_table')
@@ -16,5 +16,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  return knex.schema.dropTableIfExists('patient_info_table');
+  return knex.schema.dropTableIfExists('practitioner_info_table');
 };
