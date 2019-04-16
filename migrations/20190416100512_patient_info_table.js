@@ -9,9 +9,12 @@ exports.up = function(knex, Promise) {
             .notNullable();
         tbl.string('gender')
             .notNullable();
-    })
+        tbl.integer('userId')
+            .references('id').inTable('patients_table')
+            .notNullable();
+    });
 };
 
 exports.down = function(knex, Promise) {
-  
+  return knex.schema.dropTableIfExists('patient_info_table');
 };
