@@ -12,6 +12,8 @@ exports.up = function(knex, Promise) {
         tbl.integer('userId')
             .references('id').inTable('users_table')
             .notNullable();
+        tbl.string('whoCanAccess')
+            .notNullable();
     });
 };
 
