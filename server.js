@@ -20,6 +20,24 @@ server.post('/api/addUser', async (req, res) => {
     }
 });
 
+server.post('/api/patientInfo', async (req, res) => {
+    try {
+        const user = db('patients_table');
+        if (user) {
+            const patientInfo = await db('patient_info_table').insert(req.body);
+            res.status(201).json(patientInfo);
+        } else {
+            res.status(404).json({ message: 'User Not Found' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Error retrieving user' });
+    }
+});
+     
+
+        
+
 
 
 
