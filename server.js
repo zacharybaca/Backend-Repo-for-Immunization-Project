@@ -4,36 +4,28 @@ const knex = require('knex');
 const dBConfig = require('./knexfile.js');
 const db = knex(dBConfig.development);
 const cors = require('cors');
+const bcrypt = require('bcryptjs');
+const Users = require('./database/users-model.js');
 //Middleware
 server.use(express.json());
 server.use(cors());
 //Endpoints
-server.post('/api/addUser', async (req, res) => {
-    try {
-        const user = await db('patients_table').insert(req.body);
-        res.status(201).json(user);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            message: 'Error Adding User',
+server.post('/api/addUser',  (req, res) => {
+    let user = req.body;
+    const hash = bcrypt.hashSync(user.password, 10);
+    user.password = hash;
+
+    Users.add(user)
+        .then(saved => {
+            res.status(201).json(saved);
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json(error);
         });
-    }
 });
 
-server.post('/api/patientInfo', async (req, res) => {
-    try {
-        const user = db('patients_table');
-        if (user) {
-            const patientInfo = await db('patient_info_table').insert(req.body);
-            res.status(201).json(patientInfo);
-        } else {
-            res.status(404).json({ message: 'User Not Found' });
-        }
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Error retrieving user' });
-    }
-});
+
      
 
         
